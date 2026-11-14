@@ -1,0 +1,4 @@
+include LICENSE NOTICE README.md README.zh-CN.md RELEASING.md
+recursive-include tests *.py
+recursive-include examples *.txt
+
