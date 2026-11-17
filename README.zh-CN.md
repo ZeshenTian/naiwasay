@@ -67,8 +67,8 @@
 方式一是沿用 [Python cowsay](https://pypi.org/project/cowsay/) 调用方式和
 命令行参数的 Python 包。方式二和方式三共用同一个可移植的
 [奶蛙 Skill](https://github.com/ZeshenTian/naiwasay/tree/main/skills/naiwa)：
-把它安装进终端 AI 客户端一次，之后既可以用客户端命令启动，也可以直接用一句
-话启动。Skill 把相同的精细奶蛙形象带到 AI 对话里：开启一次后用户照常提问，
+用标准 skill 安装方式装进终端 AI 客户端一次（无需 Python 包），之后既可以
+用客户端命令启动，也可以直接用一句话启动。Skill 把相同的精细奶蛙形象带到 AI 对话里：开启一次后用户照常提问，
 LLM 每轮生成答复并自动调用随附的终端渲染器，让奶蛙在气泡里说出完整回答，
 直到用户关闭模式。
 
@@ -139,7 +139,21 @@ art = naiwasay.draw("你好！", my_character, to_console=False)
 
 ### 方式二：用 `/naiwa` 命令启动奶蛙模式
 
-把完整的 `skills/naiwa/` 目录放进控制台 AI 客户端的 Skill 目录：
+Skill 是标准的 Agent Skill：不需要 Python 包，也没有运行时依赖。用社区标准
+的 skills 安装器一条命令安装（需要 Node.js），它会自动检测你装了哪些 AI
+客户端：
+
+```bash
+npx skills add ZeshenTian/naiwasay
+```
+
+按提示选择 skill、安装范围和客户端，或用 `-s naiwa -g -y` 跳过确认（用户级、
+自动检测客户端）。安装器会把安装记录写进 `skills-lock.json`，之后用
+`npx skills update` 升级、`npx skills remove` 卸载。不加 `-g` 时默认装在
+当前目录的项目级。
+
+也可以手动安装：把完整的 `skills/naiwa/` 目录放进控制台 AI 客户端的 Skill
+目录：
 
 | 客户端 | 用户级安装目录 | 项目级安装目录 | 首次调用 |
 | --- | --- | --- | --- |
@@ -185,8 +199,9 @@ cp -R skills/naiwa "$HOME/.agents/skills/"
 
 模式仅在当前会话内保持，关闭后恢复普通回复。编程任务照常执行；需要交付
 代码或 JSON 文件时，文件保持原始格式，面向用户的回复继续用奶蛙呈现。
-调用入口由客户端提供，Skill 不会自行注册命令或修改客户端设置。
-只安装 Python 包不会自动安装 Skill。
+调用入口由客户端提供，Skill 不会自行注册命令或修改客户端设置。Python 包和
+Skill 是两个互不依赖的产品：pip 包服务于方式一，Skill 走标准 skill 分发，
+安装任何一方都不会自动安装另一方。
 
 在 AI 客户端连续输入以下消息，即可检查实际对话效果。只有第一条需要开启模式：
 

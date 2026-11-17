@@ -69,8 +69,9 @@ Way 1 is the Python package, with the familiar
 [Python cowsay](https://pypi.org/project/cowsay/) API and CLI. Ways 2 and 3
 share the same portable
 [Naiwa skill](https://github.com/ZeshenTian/naiwasay/tree/main/skills/naiwa):
-install it once into your terminal AI client, then start it either with the
-client's command entry or just by asking. The skill brings the same detailed
+install it once with the standard skills installer (no Python package
+needed), then start it either with the client's command entry or just by
+asking. The skill brings the same detailed
 character to AI conversations: enable it once, keep chatting normally, and
 on every turn the LLM generates its answer, calls the bundled terminal
 renderer, and displays the complete answer in Naiwa's speech bubble until
@@ -145,8 +146,22 @@ The character registry is available as `naiwasay.char_names`,
 
 ### Way 2: Start Naiwa mode with the `/naiwa` command
 
-Copy the complete `skills/naiwa/` folder into your terminal agent's skills
-directory:
+The skill is a standard agent skill: no Python package, no runtime
+dependencies. Install it with the standard skills installer (requires
+Node.js), which detects your AI clients automatically:
+
+```bash
+npx skills add ZeshenTian/naiwasay
+```
+
+Pick the skill, scope, and clients in the prompts, or skip them with
+`-s naiwa -g -y` (user-level, detected clients). The installer records the
+install in `skills-lock.json`; update later with `npx skills update` and
+remove with `npx skills remove`. Without `-g` it installs at project level
+in the current directory.
+
+Manual installation works too: copy the complete `skills/naiwa/` folder
+into your terminal agent's skills directory:
 
 | Client | User installation | Project installation | First invocation |
 | --- | --- | --- | --- |
@@ -202,8 +217,9 @@ The mode lasts only for the current conversation. Coding work still runs
 normally. Code and JSON deliverable files retain their original formats,
 while replies to the user continue to appear as Naiwa. Clients provide
 their own skill entry points; the skill never registers commands or changes
-client settings by itself. Installing the Python package alone does not
-install the skill.
+client settings by itself. The Python package and the skill are independent
+products: the package serves way 1, the skill uses standard skill
+distribution, and installing either one never installs the other.
 
 Try this continuous conversation in your AI client. Only the first message
 enables the mode:
