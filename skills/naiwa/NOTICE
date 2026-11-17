@@ -1,0 +1,23 @@
+naiwa agent skill
+Part of the naiwasay project
+Copyright (c) 2026 Zeshen Tian
+
+The rendering and command interfaces are adapted from cowsay-python 6.1
+by Vaasudevan Srinivasan and contributors, distributed under GPL-3.0:
+https://github.com/VaasuDevanS/cowsay-python
+https://pypi.org/project/cowsay/
+
+This distribution retains the GNU General Public License version 3.
+See LICENSE for the full license text. Changes include the Naiwa character,
+package and command names, and terminal-cell-aware Chinese text wrapping.
+
+The bundled character is a monochrome ASCII rendition of the Naiwa waving
+reference image selected for this project:
+https://naiwahub.com/media/naiwa/dot-naiwa-0204-poster.webp
+Reference collection: https://naiwahub.com/zh/series/nai-wa
+This is an independent fan project, not an official character release.
+The software license does not claim ownership of the underlying character
+or grant rights in third-party character designs or trademarks.
+
+The skill instructions and standalone Markdown renderer are additions to
+the naiwasay project. The character asset is preserved from naiwasay.

@@ -7,6 +7,27 @@ with the familiar [Python cowsay](https://pypi.org/project/cowsay/) API and CLI.
 
 Python 3.9 or later. No runtime dependencies.
 
+## AI conversation skill
+
+The portable [Naiwa skill](https://github.com/ZeshenTian/naiwasay/tree/main/skills/naiwa) adds the same detailed character to
+AI conversations. Load the complete `skills/naiwa/` folder in a client that
+supports Agent Skills, then use:
+
+| Message | Effect |
+| --- | --- |
+| `/naiwa` or `开启奶蛙模式` | Enable Naiwa mode in the current conversation |
+| `/naiwa Hello, Naiwa!` | Enable the mode and answer the message |
+| `/naiwa off` or `关闭奶蛙模式` | Disable the mode |
+
+Replies follow the user's language. Short answers appear in a speech bubble;
+long answers keep their normal formatting and end with a short Naiwa summary.
+The full approved character is bundled, along with an optional, dependency-free
+renderer. The skill does not require installing the PyPI package.
+
+These are conversational triggers interpreted after the skill is loaded; they
+do not register native slash commands or change ChatGPT Desktop's global settings.
+Installing this Python package alone does not install the skill.
+
 ## Preview
 
 ```text

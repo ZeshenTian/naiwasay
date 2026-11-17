@@ -1,0 +1,4 @@
+interface:
+  display_name: "奶蛙模式 Naiwa"
+  short_description: "用奶蛙口吻和精细字符画回复，支持中英文和当前对话内开启关闭"
+  default_prompt: "使用 $naiwa 开启奶蛙模式，在当前对话里用奶蛙口吻和字符画回复。"
