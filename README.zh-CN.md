@@ -7,10 +7,26 @@
 
 支持 Python 3.9 及以上版本，无运行时依赖。
 
-## AI 对话 Skill
+## 控制台 AI Skill
 
 [奶蛙模式 Skill](https://github.com/ZeshenTian/naiwasay/tree/main/skills/naiwa) 把相同的精细奶蛙形象带到 AI 对话里。
-在支持 Agent Skills 的客户端中加载完整的 `skills/naiwa/` 目录后，可以发送：
+把完整的 `skills/naiwa/` 目录放进控制台 AI 客户端的 Skill 目录：
+
+| 客户端 | 用户级安装目录 | 项目级安装目录 | 首次调用 |
+| --- | --- | --- | --- |
+| [Codex CLI](https://learn.chatgpt.com/docs/build-skills) | `~/.agents/skills/naiwa/` | `.agents/skills/naiwa/` | `$naiwa 开启奶蛙模式` |
+| [Claude Code](https://code.claude.com/docs/en/skills) | `~/.claude/skills/naiwa/` | `.claude/skills/naiwa/` | `/naiwa` |
+| [Pi](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/skills.md) | `~/.pi/agent/skills/naiwa/` | `.pi/skills/naiwa/` | `/skill:naiwa` |
+| [OpenCode](https://opencode.ai/docs/skills/) | `~/.config/opencode/skills/naiwa/` | `.opencode/skills/naiwa/` | `使用 naiwa skill，开启奶蛙模式` |
+
+例如，从本仓库根目录为 Codex CLI 安装（已有同名目录时，先备份再更新）：
+
+```bash
+mkdir -p "$HOME/.agents/skills"
+cp -R skills/naiwa "$HOME/.agents/skills/"
+```
+
+在客户端加载或刷新 Skill 后，首次通过表中的入口调用；随后可以自然对话：
 
 | 消息 | 效果 |
 | --- | --- |
@@ -22,8 +38,26 @@
 保留正常排版，最后附一句奶蛙总结。Skill 内附完整字符画和可选的独立
 渲染脚本，无需安装 PyPI 包；没有执行工具时，也可以直接使用字符画。
 
-这些开关是 Skill 加载后的对话约定，不会注册客户端原生斜杠命令，
-也不会修改 ChatGPT Desktop 的全局聊天设置。只安装 Python 包不会自动安装 Skill。
+模式仅在当前会话内保持，关闭后恢复普通回复；只输出 JSON、代码或翻译时，
+自动省略本轮装饰。编程任务照常执行，进度更新不会反复打印整幅奶蛙。
+Skill 负责行为说明和渲染，调用入口由客户端提供；如果客户端不接受 `/naiwa`，
+请使用表中的入口或自然语言“开启奶蛙模式”。只安装 Python 包不会自动安装 Skill。
+
+也可以直接在 shell 里测试随附脚本，默认输出纯文本：
+
+```bash
+python3 skills/naiwa/scripts/render_naiwa.py --text '奶家人，Build 通过了！'
+python3 skills/naiwa/scripts/render_naiwa.py --format markdown --text 'Hello, Naiwa!'
+python3 skills/naiwa/scripts/render_naiwa.py --stdin --width 24 <<'NAIWA_MESSAGE'
+奶家人，中文和 English 都能说！
+NAIWA_MESSAGE
+```
+
+`--format plain`（默认）用于终端 stdout、文本文件和管道；`--format markdown`
+用于支持 Markdown 的 AI 对话区。气泡默认每行最多 36 个显示列，
+`--width` 接受 2–80；完整字符画保持固定缩进。请使用等宽字体，
+窄窗口自动折行时加宽窗口。脚本的 CLI 默认值从 Markdown 改为纯文本；
+原有调用若需要代码围栏，请显式传入 `--format markdown`。
 
 ## 安装
 

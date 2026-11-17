@@ -7,11 +7,29 @@ with the familiar [Python cowsay](https://pypi.org/project/cowsay/) API and CLI.
 
 Python 3.9 or later. No runtime dependencies.
 
-## AI conversation skill
+## Terminal AI skill
 
 The portable [Naiwa skill](https://github.com/ZeshenTian/naiwasay/tree/main/skills/naiwa) adds the same detailed character to
-AI conversations. Load the complete `skills/naiwa/` folder in a client that
-supports Agent Skills, then use:
+AI conversations. Copy the complete `skills/naiwa/` folder into your terminal
+agent's skills directory:
+
+| Client | User installation | Project installation | First invocation |
+| --- | --- | --- | --- |
+| [Codex CLI](https://learn.chatgpt.com/docs/build-skills) | `~/.agents/skills/naiwa/` | `.agents/skills/naiwa/` | `$naiwa Enable Naiwa mode` |
+| [Claude Code](https://code.claude.com/docs/en/skills) | `~/.claude/skills/naiwa/` | `.claude/skills/naiwa/` | `/naiwa` |
+| [Pi](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/skills.md) | `~/.pi/agent/skills/naiwa/` | `.pi/skills/naiwa/` | `/skill:naiwa` |
+| [OpenCode](https://opencode.ai/docs/skills/) | `~/.config/opencode/skills/naiwa/` | `.opencode/skills/naiwa/` | `Use the naiwa skill and enable Naiwa mode` |
+
+For example, from this repository's root, install for Codex CLI (back up any
+existing `naiwa` directory before updating):
+
+```bash
+mkdir -p "$HOME/.agents/skills"
+cp -R skills/naiwa "$HOME/.agents/skills/"
+```
+
+Load or refresh skills in your client, invoke the skill using the appropriate
+entry above, then continue the conversation:
 
 | Message | Effect |
 | --- | --- |
@@ -24,9 +42,29 @@ long answers keep their normal formatting and end with a short Naiwa summary.
 The full approved character is bundled, along with an optional, dependency-free
 renderer. The skill does not require installing the PyPI package.
 
-These are conversational triggers interpreted after the skill is loaded; they
-do not register native slash commands or change ChatGPT Desktop's global settings.
-Installing this Python package alone does not install the skill.
+The mode lasts only for the current conversation. Strict JSON, code-only, and
+translation-only replies omit the decoration for that turn. Coding work still
+runs normally; progress messages do not repeat the whole character.
+Clients provide their own skill entry points. If a client rejects `/naiwa`,
+use its entry above or ask it to enable Naiwa mode in natural language.
+Installing the Python package alone does not install the skill.
+
+Test the bundled renderer directly in your shell; no package installation is needed:
+
+```bash
+python3 skills/naiwa/scripts/render_naiwa.py --text 'Build passed!'
+python3 skills/naiwa/scripts/render_naiwa.py --format markdown --text 'Hello, Naiwa!'
+python3 skills/naiwa/scripts/render_naiwa.py --stdin --width 24 <<'NAIWA_MESSAGE'
+奶家人，Chinese and English both work!
+NAIWA_MESSAGE
+```
+
+`--format plain` (the default) produces terminal stdout for display, files, or
+pipes. Use `--format markdown` for AI conversation panes that render Markdown.
+The bubble wraps at 36 display columns by default; `--width` accepts 2–80.
+The complete character uses a fixed indent. Use a monospace font and widen the
+window if it wraps the drawing. The renderer's CLI previously defaulted to
+Markdown; existing callers that need fences must now pass `--format markdown`.
 
 ## Preview
 

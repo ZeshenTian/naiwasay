@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render the bundled Naiwa as Markdown, using only the Python standard library."""
+"""Render Naiwa for a terminal or Markdown, using only the standard library."""
 
 import argparse
 from pathlib import Path
@@ -81,10 +81,16 @@ def main():
     source.add_argument("--text", help="Short answer or summary for the speech bubble")
     source.add_argument("--stdin", action="store_true", help="Read the message from standard input")
     parser.add_argument("--width", type=int, default=36, help="Maximum speech-bubble width in cells")
+    parser.add_argument(
+        "--format", choices=("plain", "markdown"), default="plain",
+        help="Output format: plain for terminal stdout (default), markdown for AI chat replies",
+    )
     args = parser.parse_args()
     try:
-        print(markdown(sys.stdin.read() if args.stdin else args.text, args.width))
-    except ValueError as error:
+        message = sys.stdin.read() if args.stdin else args.text
+        formatter = markdown if args.format == "markdown" else render
+        print(formatter(message, args.width))
+    except (ValueError, OSError) as error:
         parser.error(str(error))
 
 
