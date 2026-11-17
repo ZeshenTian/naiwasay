@@ -1,6 +1,7 @@
 include LICENSE NOTICE README.md README.zh-CN.md RELEASING.md
 recursive-include tests *.py
 recursive-include examples *.txt
+recursive-include scripts *.py
 recursive-include skills/naiwa *.md *.yaml *.txt *.py
 include skills/naiwa/LICENSE skills/naiwa/NOTICE
 
