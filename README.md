@@ -170,6 +170,8 @@ entry, then continue the conversation:
 | --- | --- |
 | `/naiwa` or `开启奶蛙模式` | Enable Naiwa mode in the current conversation |
 | `/naiwa Hello, Naiwa!` | Enable the mode and answer the message |
+| `/naiwa full` | Enable and lock every reply into the speech bubble |
+| `/naiwa auto` | Adaptive default: short replies in the bubble, long replies closed by a hint |
 | `/naiwa off` or `关闭奶蛙模式` | Disable the mode |
 
 ### Way 3: Start Naiwa mode with natural language
@@ -185,12 +187,16 @@ repository and enable the mode. The AI runs the bundled renderer each turn.
 
 ### What Naiwa mode does (ways 2 and 3)
 
-Replies follow the user's language. Every complete answer goes into the
-bubble, including long explanations, code, JSON, and translations.
-Paragraph breaks and code indentation are preserved. Naiwa's identity comes
-from the terminal drawing; forced catchphrases are unnecessary. The full
-character and dependency-free renderer are bundled; installing the PyPI
-package is not required.
+Replies follow the user's language. Output adapts to reply length: short
+answers appear complete in Naiwa's speech bubble, while long answers — code,
+tables, multi-paragraph explanations — are delivered as normal text and
+closed by a one-line Naiwa hint bubble, so long work sessions stay
+readable. `/naiwa full` locks every reply into the bubble; `/naiwa auto`
+restores the adaptive default. Paragraph breaks and code indentation are
+preserved in both forms. Naiwa's identity comes from the terminal drawing;
+forced catchphrases are unnecessary. The full character and
+dependency-free renderer are bundled; installing the PyPI package is not
+required.
 
 The mode lasts only for the current conversation. Coding work still runs
 normally. Code and JSON deliverable files retain their original formats,
@@ -207,13 +213,18 @@ Enable Naiwa mode
 Hello
 Explain what a CLI is
 Write a Python function that doubles positive numbers and otherwise returns 0
+/naiwa full
+Write it again
+/naiwa auto
 Translate hello into Chinese
 Disable Naiwa mode
 Explain what a CLI is again
 ```
 
-Every complete answer before deactivation should appear as Naiwa;
-subsequent answers return to normal.
+Before deactivation, short answers should appear complete in the bubble,
+and long answers as plain text closed by a Naiwa hint; between `/naiwa
+full` and `/naiwa auto`, even the long answer goes entirely into the
+bubble. After deactivation, answers return to normal.
 
 ### The skill renderer on its own
 
