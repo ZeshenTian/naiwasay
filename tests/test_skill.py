@@ -50,6 +50,34 @@ class SkillRendererTests(unittest.TestCase):
         self.assertEqual(output.splitlines()[0], "````text")
         self.assertEqual(output.splitlines()[-1], "````")
 
+    def test_complete_reply_keeps_paragraphs_and_code_indentation(self):
+        reply = (
+            "先定义函数：\n\n"
+            "```python\n"
+            "def double_positive(x):\n"
+            "    if x > 0:\n"
+            "        return x * 2\n"
+            "    return 0\n"
+            "```\n\n"
+            "输入 3 时返回 6。"
+        )
+        self.assertEqual(renderer.wrap_lines(reply, 36), reply.splitlines())
+        rows = [line for line in renderer.render(reply).splitlines() if line.startswith("| ")]
+        recovered = [row[2:-2].rstrip() for row in rows]
+        self.assertEqual(recovered, reply.splitlines())
+
+    def test_complete_multiline_reply_survives_cli_stdin(self):
+        paragraphs = ["第 {} 段：这段回答必须完整保留。".format(i) for i in range(1, 16)]
+        reply = "\n\n".join(paragraphs)
+        result = subprocess.run(
+            [sys.executable, "-I", str(SCRIPT), "--stdin"], input=reply,
+            text=True, capture_output=True, check=True, timeout=10,
+        )
+        rows = [line for line in result.stdout.splitlines() if line.startswith("| ")]
+        self.assertEqual([row[2:-2].rstrip() for row in rows], reply.splitlines())
+        expected = NAIWA.strip("\n").splitlines()
+        self.assertEqual(result.stdout.splitlines()[-len(expected):], ["    " + line for line in expected])
+
     def test_empty_or_control_text_is_rejected(self):
         for message in ["", "\n  \n", "hello\x1b[31m"]:
             with self.subTest(message=message), self.assertRaises(ValueError):

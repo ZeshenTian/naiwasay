@@ -26,18 +26,21 @@ def wrap_lines(text, width):
         raise ValueError("width must be between 2 and 80")
     if any(unicodedata.category(c) == "Cc" and c not in "\n\r\t" for c in text):
         raise ValueError("text must not contain terminal control characters")
+    if not text.strip():
+        raise ValueError("text must not be empty")
     lines = []
     for source in text.expandtabs(4).splitlines():
         line = ""
         current_width = 0
-        tokens = re.findall(r"[ ]+|[A-Za-z0-9]+(?:['-][A-Za-z0-9]+)*|.", source.strip())
+        seen_content = False
+        tokens = re.findall(r"[ ]+|[A-Za-z0-9]+(?:['-][A-Za-z0-9]+)*|.", source.rstrip())
         for token in tokens:
             token_width = cell_width(token)
             if line and current_width + token_width > width and token_width <= width:
                 lines.append(line.rstrip())
                 line = ""
                 current_width = 0
-            if not line and token.isspace():
+            if not line and token.isspace() and seen_content:
                 continue
             for char in token:
                 char_width = cell_width(char)
@@ -47,7 +50,9 @@ def wrap_lines(text, width):
                     current_width = 0
                 line += char
                 current_width += char_width
-        if line:
+            if not token.isspace():
+                seen_content = True
+        if line or not source.strip():
             lines.append(line.rstrip())
     if not lines:
         raise ValueError("text must not be empty")
@@ -78,8 +83,8 @@ def markdown(text, width=36):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     source = parser.add_mutually_exclusive_group(required=True)
-    source.add_argument("--text", help="Short answer or summary for the speech bubble")
-    source.add_argument("--stdin", action="store_true", help="Read the message from standard input")
+    source.add_argument("--text", help="Complete reply to display in the speech bubble")
+    source.add_argument("--stdin", action="store_true", help="Read the complete reply from standard input")
     parser.add_argument("--width", type=int, default=36, help="Maximum speech-bubble width in cells")
     parser.add_argument(
         "--format", choices=("plain", "markdown"), default="plain",

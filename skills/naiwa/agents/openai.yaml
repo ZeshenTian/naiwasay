@@ -1,4 +1,4 @@
 interface:
   display_name: "奶蛙控制台 Naiwa"
-  short_description: "让控制台 AI 用完整奶蛙形象回复，支持中英文、会话开关和双格式输出"
-  default_prompt: "使用 $naiwa 开启奶蛙模式，在当前对话里用奶蛙口吻、气泡和完整字符画回复。"
+  short_description: "开启后每轮自动调用控制台奶蛙，完整展示 AI 回复，持续到关闭"
+  default_prompt: "使用 $naiwa 开启奶蛙模式，从现在起每轮都调用控制台渲染器，让奶蛙说出完整答复，直到我明确关闭。"

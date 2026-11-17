@@ -10,8 +10,10 @@ Python 3.9 or later. No runtime dependencies.
 ## Terminal AI skill
 
 The portable [Naiwa skill](https://github.com/ZeshenTian/naiwasay/tree/main/skills/naiwa) adds the same detailed character to
-AI conversations. Copy the complete `skills/naiwa/` folder into your terminal
-agent's skills directory:
+AI conversations. Enable it once, then keep chatting normally: on every turn,
+the LLM generates its answer, calls the terminal renderer, and displays the
+complete answer in Naiwa's speech bubble until you disable the mode.
+Copy the complete `skills/naiwa/` folder into your terminal agent's skills directory:
 
 | Client | User installation | Project installation | First invocation |
 | --- | --- | --- | --- |
@@ -37,19 +39,37 @@ entry above, then continue the conversation:
 | `/naiwa Hello, Naiwa!` | Enable the mode and answer the message |
 | `/naiwa off` or `关闭奶蛙模式` | Disable the mode |
 
-Replies follow the user's language. Short answers appear in a speech bubble;
-long answers keep their normal formatting and end with a short Naiwa summary.
-The full approved character is bundled, along with an optional, dependency-free
-renderer. The skill does not require installing the PyPI package.
+Replies follow the user's language. Every complete answer goes into the bubble,
+including long explanations, code, JSON, and translations. Paragraph breaks and
+code indentation are preserved. Naiwa's identity comes from the terminal drawing;
+forced catchphrases are unnecessary. The full character and dependency-free
+renderer are bundled; installing the PyPI package is not required.
 
-The mode lasts only for the current conversation. Strict JSON, code-only, and
-translation-only replies omit the decoration for that turn. Coding work still
-runs normally; progress messages do not repeat the whole character.
+The mode lasts only for the current conversation. Coding work still runs normally.
+Code and JSON deliverable files retain their original formats, while replies to
+the user continue to appear as Naiwa.
 Clients provide their own skill entry points. If a client rejects `/naiwa`,
 use its entry above or ask it to enable Naiwa mode in natural language.
 Installing the Python package alone does not install the skill.
 
-Test the bundled renderer directly in your shell; no package installation is needed:
+Try this continuous conversation in your AI client. Only the first message enables the mode:
+
+```text
+Enable Naiwa mode
+Hello
+Explain what a CLI is
+Write a Python function that doubles positive numbers and otherwise returns 0
+Translate hello into Chinese
+Disable Naiwa mode
+Explain what a CLI is again
+```
+
+Every complete answer before deactivation should appear as Naiwa; subsequent
+answers return to normal. For a trial before installation, ask an AI with local
+file and execution tools to read `skills/naiwa/SKILL.md` in this repository and
+enable the mode, then send the same messages. The AI runs the renderer each turn.
+
+The following shell commands check the rendering component separately:
 
 ```bash
 python3 skills/naiwa/scripts/render_naiwa.py --text 'Build passed!'
